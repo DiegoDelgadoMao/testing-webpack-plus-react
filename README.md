@@ -157,9 +157,81 @@ el resultado:
     	};
 
 18. Instalar la siguiente dependencia para crear un servidor local -> `npm install --save-dev webpack-dev-server`
-19. Agregar el siguiente script:
+19. crear un archivo en el root del proyecto llamado `webpack.config.dev.js`, donde vivira la configuración de un entorno de desarrollo. poner lo siguiente en él:
+
+        const path = require("path");
+        const HtmlWebpackPlugin = require("html-webpack-plugin");
+        module.exports = {
+        	entry: "./src/index.js",
+        	output: {
+        		path: path.resolve(__dirname, "dist"),
+        		filename: "bundle.js",
+        	},
+        	mode: 'development',
+        	resolve: {
+        		extensions: [".js", ".jsx"],
+        	},
+        	module: {
+        		rules: [
+        			{
+        				test: /\.(js|jsx)$/,
+        				exclude: /node_modules/,
+        				use: {
+        					loader: "babel-loader",
+        				},
+        			},
+        			{
+        				test: /\.html$/,
+        				use: [
+        					{
+        						loader: "html-loader",
+        					},
+        				],
+        			},
+        		],
+        	},
+        	plugins: [
+        		new HtmlWebpackPlugin({
+        			template: "./public/index.html",
+        			filename: "index.html",
+        		}),
+        	],
+        	devServer: {
+        		static: {
+        			directory: path.join(__dirname, "dist"),
+        			watch: true
+        		},
+        		watchFiles: path.join(__dirname, "./**"),
+        		compress: true,
+        		historyApiFallback: true,
+        		port: 3006,
+        		open: false,
+        	}
+        };
+
+20. Agregar el siguiente script y modificar el de dev:
 
         "scripts": {
         	...
-        	"start": "webpack-dev-server --history-api-fallback --open --mode development"
+        	"dev": "webpack --config webpack.config.dev.js",
+        	"start": "webpack server --config webpack.config.dev.js"
+        },
+
+21. modificar el `webpack.config.js`
+
+        ...
+        module.exports = {
+        	....
+        	output: {
+        		...
+        	},
+        	mode: 'production',
+        	...
+        };
+
+22. También hay que modificar el script del `package.json`
+
+        "scripts": {
+        	"build": "webpack --config webpack.config.js",
+        	...
         },
