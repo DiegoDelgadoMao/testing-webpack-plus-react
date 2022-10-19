@@ -8,7 +8,7 @@ module.exports = {
 		path: path.resolve(__dirname, "dist"),
 		filename: "bundle.js",
 	},
-	mode: 'production',
+	mode: 'development',
 	resolve: {
 		extensions: [".js", ".jsx"],
 	},
@@ -48,4 +48,15 @@ module.exports = {
 			filename: '[name].css'
 		}),
 	],
+	devServer: {
+		static: {
+			directory: path.join(__dirname, "dist"),
+			watch: true
+		},
+		watchFiles: path.join(__dirname, "./**"),
+		compress: true,
+		historyApiFallback: true,
+		port: 3006,
+		open: false,
+	}
 };
