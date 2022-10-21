@@ -163,3 +163,27 @@ el resultado:
         	...
         	"start": "webpack-dev-server --history-api-fallback --open --mode development"
         },
+
+20. Instalar la siguiente dependecia para  añadir sass ->  `npm i sass-loader sass style-loader css-loader mini-css-extract-plugin`
+
+21. Agregar lo siguiente al `webpack.config.js`
+
+			module: {
+				rules: [
+					    {
+						test: /\.(scss|css)$/,
+				         use: [ "style-loader",
+				                 "css-loader",
+				                  "sass-loader",
+				              ],
+						},
+					   ],	
+					},
+22. Tambien añadimos el siguien plugin en `webpack.config.js` con siguiente configuracion para poder hacer import de archivos css separados usado  `mini-css-extract-plugin`
+
+           const MinicssPlugin = require("mini-css-extract-plugin");
+
+		 plugins: [
+		     new MinicssPlugin({
+			   filename: '[name].css'}),
+			   ],
