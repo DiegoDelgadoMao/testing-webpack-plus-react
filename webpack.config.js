@@ -1,12 +1,14 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MinicssPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
+const MinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
 	entry: "./src/index.js",
 	output: {
 		path: path.resolve(__dirname, "dist"),
-		filename: "bundle.js",
+		filename: "[name].[contenthash].js",
 	},
 	mode: 'production',
 	resolve: {
@@ -45,7 +47,14 @@ module.exports = {
 			filename: "index.html",
 		}),
 		new MinicssPlugin({
-			filename: '[name].css'
+			filename: 'assets/[name].[contenthash].css'
 		}),
 	],
+	optimization: {
+		minimize: true,
+		minimizer: [
+		  new MinimizerPlugin(),
+		  new TerserPlugin(),
+		]
+	  },
 };
