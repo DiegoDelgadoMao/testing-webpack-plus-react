@@ -30,6 +30,13 @@ module.exports = {
 				],
 			},
 			{
+				test: /\.(woff|woff2)$/i,
+				type: 'asset/resource',
+				generator: {
+					filename: 'assets/fonts/[hash][ext][query]'
+				}
+			},
+			{
 				test: /\.(scss|css)$/,
 				use: [
 					"style-loader",
