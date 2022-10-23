@@ -92,8 +92,10 @@ Hasta este punto ya se puede ejecutar un `npm run build` y se creara un dist/bun
         	"dev": "webpack --mode development"
         },
 
-16. Instalar los siguientes plugins para html -> `npm install --save-dev html-webpack-plugin html-loader`
-17. Agregar lo siguiente al `webpack.config.js`
+## HTML
+
+1.  Instalar los siguientes plugins para html -> `npm install --save-dev html-webpack-plugin html-loader`
+2.  Agregar lo siguiente al `webpack.config.js`
 
         const HtmlWebpackPlugin = require("html-webpack-plugin");
         module.exports = {
@@ -156,8 +158,10 @@ el resultado:
     		],
     	};
 
-18. Instalar la siguiente dependencia para crear un servidor local -> `npm install --save-dev webpack-dev-server`
-19. crear un archivo en el root del proyecto llamado `webpack.config.dev.js`, donde vivira la configuración de un entorno de desarrollo. poner lo siguiente en él:
+## webpack-derv-server (servidor local)
+
+1.  Instalar la siguiente dependencia para crear un servidor local -> `npm install --save-dev webpack-dev-server`
+2.  crear un archivo en el root del proyecto llamado `webpack.config.dev.js`, donde vivira la configuración de un entorno de desarrollo. poner lo siguiente en él:
 
         const path = require("path");
         const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -209,7 +213,7 @@ el resultado:
         	}
         };
 
-20. Agregar el siguiente script y modificar el de dev:
+3.  Agregar el siguiente script y modificar el de dev:
 
         "scripts": {
         	...
@@ -217,7 +221,7 @@ el resultado:
         	"start": "webpack server --config webpack.config.dev.js"
         },
 
-21. modificar el `webpack.config.js`
+4.  modificar el `webpack.config.js`
 
         ...
         module.exports = {
@@ -229,33 +233,78 @@ el resultado:
         	...
         };
 
-22. También hay que modificar el script del `package.json`
+5.  También hay que modificar el script del `package.json`
 
         "scripts": {
         	"build": "webpack --config webpack.config.js",
         	...
         },
 
-20. Instalar la siguiente dependecia para  añadir sass ->  `npm i sass-loader sass style-loader css-loader mini-css-extract-plugin`
+## Soporte para estilos css y sass
 
-21. Agregar lo siguiente al `webpack.config.js`
+1.  Instalar la siguiente dependecia para añadir sass -> `npm i sass-loader sass style-loader css-loader mini-css-extract-plugin`
 
-			module: {
-				rules: [
-					    {
-						test: /\.(scss|css)$/,
-				         use: [ "style-loader",
-				                 "css-loader",
-				                  "sass-loader",
-				              ],
-						},
-					   ],	
-					},
-22. Tambien añadimos el siguien plugin en `webpack.config.js` con siguiente configuracion para poder hacer import de archivos css separados usado  `mini-css-extract-plugin`
+2.  Agregar lo siguiente al `webpack.config.js`
 
-           const MinicssPlugin = require("mini-css-extract-plugin");
+        module: {
+        	rules: [
+        		{
+        			test: /\.(scss|css)$/,
+        	        use: [
+        				"style-loader",
+        	            "css-loader",
+        	            "sass-loader",
+        	        ],
+        		},
+        	],
+        },
 
-		 plugins: [
-		     new MinicssPlugin({
-			   filename: '[name].css'}),
-			   ],
+3.  Tambien añadimos el siguien plugin en `webpack.config.js` con siguiente configuracion para poder hacer import de archivos css separados usado `mini-css-extract-plugin`
+
+        const MinicssPlugin = require("mini-css-extract-plugin");
+         plugins: [
+             new MinicssPlugin({
+        	filename: '[name].css'}),
+        ],
+
+## Asset Management -> fuentes
+
+1.  añadir la siguiente estructura de carpetas en el root:
+
+        |- styles
+        	|- fonts
+        		|- (aqui van tus funtes con la extension woff y woff2)
+
+2.  configurar el `webpack.config.js` con lo siguinte:
+
+        {
+        	test: /\.(woff|woff2)$/i,
+        	type: 'asset/resource',
+        	generator: {
+          		filename: 'styles/fonts/[hash][ext][query]',
+        	},
+        },
+
+y el `webpack.config.dev.js` con
+
+    	{
+    		test: /\.(woff|woff2)$/i,
+        	type: 'asset/resource',
+        	generator: {
+          		filename: 'styles/fonts/[name][ext][query]',
+        	},
+    	},
+
+3.  añadir el soporte para css
+
+        @font-face {
+        	font-family: 'fontName';
+        	src: url('./fonts/fontName.woff2') format('woff2'),
+        	url('./fonts/fontName.woff') format('woff');
+        	font-weight: 400;
+        	font-style: normal;
+        }
+        // uso
+        body {
+        	font-family: 'fontName';
+        }
