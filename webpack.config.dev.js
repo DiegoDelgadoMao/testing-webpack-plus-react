@@ -1,12 +1,14 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MinicssPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
 	entry: "./src/index.js",
 	output: {
 		path: path.resolve(__dirname, "dist"),
-		filename: "bundle.js",
+		filename: "[name].[contenthash].js",
+		assetModuleFilename: 'assets/images/[hash][ext][query]'
 	},
 	mode: 'development',
 	resolve: {
@@ -38,8 +40,7 @@ module.exports = {
 			},
 			{
 				test: /\.(scss|css)$/,
-				use: [
-					"style-loader",
+				use:[MinicssPlugin.loader,
 					"css-loader",
 					"sass-loader",
 				],
@@ -52,9 +53,15 @@ module.exports = {
 			filename: "index.html",
 		}),
 		new MinicssPlugin({
-			filename: '[name].css'
+			filename:'[name].css'
 		}),
 	],
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new CssMinimizerPlugin()
+		]
+	},
 	devServer: {
 		static: {
 			directory: path.join(__dirname, "dist"),
@@ -64,6 +71,6 @@ module.exports = {
 		compress: true,
 		historyApiFallback: true,
 		port: 3006,
-		open: false,
+		open: true,
 	}
 };
