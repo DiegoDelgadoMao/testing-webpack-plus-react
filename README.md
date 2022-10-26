@@ -242,7 +242,7 @@ el resultado:
 
 ## Soporte para estilos css y sass
 
-1.  Instalar la siguiente dependecia para añadir sass -> `npm i sass-loader sass style-loader css-loader mini-css-extract-plugin`
+1.  Instalar la siguiente dependecia para añadir sass -> `npm i sass-loader sass css-loader mini-css-extract-plugin`
 
 2.  Agregar lo siguiente al `webpack.config.js`
 
@@ -250,8 +250,7 @@ el resultado:
         	rules: [
         		{
         			test: /\.(scss|css)$/,
-        	        use: [
-        				"style-loader",
+        	        use: [MinicssPlugin.loader,
         	            "css-loader",
         	            "sass-loader",
         	        ],
