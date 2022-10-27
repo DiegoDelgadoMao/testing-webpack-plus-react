@@ -307,3 +307,44 @@ y el `webpack.config.dev.js` con
         body {
         	font-family: 'fontName';
         }
+## Copia de archivos con loader de imagenes
+
+1. se instala `npm i copy-webpack-plugin -D `
+2. se configura  `webpack.config.js` con lo siguiente: 
+
+       const CopyPlugin = require('copy-webpack-plugin');
+	   ...
+	   plugins: [
+		new CopyPlugin({
+			patterns:[
+				{
+					from: path.resolve(__dirname, "src",
+					'assets/images'),
+					to : "assets/images"
+				}
+			]
+		})
+	   ],
+3. Ya se puede quitar en el src de la estiqueta img los `../` y llar la carpeta directamente ya que esta en dist.
+4. ahora añadimos el loader para imagenes configuramos el `webpack.config.js` con lo siguiente:
+
+         module.exports = {
+	      entry: "./src/index.js",
+	       output: {
+		     assetModuleFilename: 'assets/images/[hash][ext][query]'
+	    },
+Añadimos el AssertModuleFilename para configurar el archivo final con hash.
+5. Configuramos en module/rules para que webpack reconosca los archivos .png en webpack.
+       
+	        module: { 
+				rule: [ 
+			      {
+				   test:/\.png/,
+				   type: 'asset/resource'
+			      }]
+				}
+6. Ya se pueden importar la imagens en los archvos js o jsx usando lo siguiente: 
+              
+			  import Githubimg from '../assets/images/github.png';
+
+Y podemos llamarlo en cualquier momento dentro del archivo.

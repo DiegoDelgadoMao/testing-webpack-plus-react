@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MinicssPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	entry: "./src/index.js",
@@ -44,6 +45,10 @@ module.exports = {
 					"css-loader",
 					"sass-loader",
 				],
+			},
+			{
+				test:/\.png/,
+				type: 'asset/resource'
 			}
 		],
 	},
@@ -55,6 +60,15 @@ module.exports = {
 		new MinicssPlugin({
 			filename:'[name].css'
 		}),
+		new CopyPlugin({
+			patterns:[
+				{
+					from: path.resolve(__dirname, "src",
+					'assets/images'),
+					to : "assets/images"
+				}
+			]
+		})
 	],
 	optimization: {
 		minimize: true,
